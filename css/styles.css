@@ -1,0 +1,11 @@
+#container{
+    display: flex;
+    justify-content: space-around;
+}
+
+#results{
+    display: flex;
+    justify-content: center;
+    white-space: pre;
+    text-align: center;
+}

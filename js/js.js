@@ -1,6 +1,8 @@
 let humanScore = 0;
 let computerScore = 0;
 
+let results = document.getElementById("results");
+
 function getComputerChoice(){
     let choice = Math.floor(Math.random()*3);
 
@@ -19,12 +21,12 @@ function getComputerChoice(){
     }
 }
 
-function getHumanChoice(){
-    let humanChoice = (prompt("Choose rock, paper, or scissors", "rock | paper | scissors"));
-    if(!humanChoice){
-        alert("Please Play with Me?");
-        return getHumanChoice();
-    };
+function getHumanChoice(humanChoice){
+    // let humanChoice = (prompt("Choose rock, paper, or scissors", "rock | paper | scissors"));
+    // if(!humanChoice){
+    //     alert("Please Play with Me?");
+    //     return getHumanChoice();
+    // };
     return humanChoice.toLowerCase();
 }
 
@@ -54,40 +56,68 @@ function compareChoices(humanChoice, computerChoice){
 }
 
 function playRound(humanChoice, computerChoice){
-    if (humanChoice === "rock" || humanChoice === "paper" || humanChoice === "scissors") {
-        //Lets see who won
-        let humanWon = false;
+    // if (humanChoice === "rock" || humanChoice === "paper" || humanChoice === "scissors") {
+    //     //Lets see who won
+    //     let humanWon = false;
         
-        constructEndString(compareChoices(humanChoice, computerChoice), humanChoice, computerChoice);
-    }else{
-        alert("Please Enter Either rock, paper, or scissors");
-        // humanChoice = getHumanChoice();
-        return playRound(getHumanChoice(), getComputerChoice());
-    }
+        results.innerHTML = constructEndString(compareChoices(humanChoice, computerChoice), humanChoice, computerChoice);
+    // }else{
+    //     alert("Please Enter Either rock, paper, or scissors");
+    //     // humanChoice = getHumanChoice();
+    //     return playRound(getHumanChoice(), getComputerChoice());
+    // }
 
-    console.log(humanChoice, computerChoice);
+    // console.log(humanChoice, computerChoice);
 
     function constructEndString(humanWon, humanChoice, computerChoice){
         let winner, loser;
         if(humanWon === null){
-            return console.log("It's a tie!");
+            // return console.log(`It's a tie! You chose ${humanChoice} and the computer chose ${computerChoice}`);
+            return `It's a tie! You chose ${humanChoice} and the computer chose ${computerChoice}\nHumanScore= ${humanScore}, ComputerScore= ${computerScore}`;
         }
         
         else {
             humanWon ? (winner = humanChoice, loser = computerChoice, humanScore++) : (winner = computerChoice, loser = humanChoice, computerScore++);
-            return console.log(`You ${humanWon ? "Win" : "Lose"}! ${winner} beats ${loser}: HumanScore= ${humanScore}, ComputerScore= ${computerScore}`);
+            // return console.log(`You ${humanWon ? "Win" : "Lose"}! ${winner} beats ${loser}: HumanScore= ${humanScore}, ComputerScore= ${computerScore}`);
+            return `You ${humanWon ? "Win" : "Lose"}! ${winner} beats ${loser}\nHumanScore= ${humanScore}, ComputerScore= ${computerScore}`;
         }
     }
 
+    if(humanScore >= 5 || computerScore >= 5) endGame(humanScore, computerScore);
 
-
-    // console.log(constructEndString());
 }
 
-function playGame(){
-    for (let index = 0; index < 5; index++) {
-        playRound(getHumanChoice(), getComputerChoice())
+function endGame(){
+    if(humanScore >= 5){
+        alert("You Win!");
+        humanScore = computerScore = 0;
+    }else if(computerScore >= 5){
+        alert("The Computer Wins, better luck next time");
+        humanScore = computerScore = 0;
     }
 }
 
-playGame();
+function playGame(event){
+    // for (let index = 0; index < 5; index++) {
+        playRound(getHumanChoice(event.srcElement.innerHTML), getComputerChoice())
+    // }
+    // console.log(event.srcElement.innerHTML);
+}
+
+// playGame();
+let container = document.getElementById("container");
+
+let rockBtn = document.createElement("BUTTON");
+rockBtn.innerHTML = "ROCK";
+rockBtn.addEventListener("click", playGame);
+container.appendChild(rockBtn);
+
+let paperBtn = document.createElement("BUTTON");
+paperBtn.innerHTML = "PAPER";
+paperBtn.addEventListener("click", playGame);
+container.appendChild(paperBtn);
+
+let scissorsBtn = document.createElement("BUTTON");
+scissorsBtn.innerHTML = "SCISSOR";
+scissorsBtn.addEventListener("click", playGame);
+container.appendChild(scissorsBtn);
